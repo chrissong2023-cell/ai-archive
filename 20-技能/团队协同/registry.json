@@ -1,0 +1,2415 @@
+{
+ "generated": "2026-10-22T13:05:01+0800",
+ "machine": "MacBook Pro (Hannah + Nova)",
+ "counts": {
+  "shared": 7,
+  "hannah": 73,
+  "nova": 76
+ },
+ "routing": [
+  {
+   "capability": "邮件：收件箱分诊 / 草拟 / 发信 / 获客外发",
+   "primary": "hannah",
+   "fallback": "nova",
+   "how": "Hannah: 金技能 lishun-mail-acquisition（3 个 cron + 审批闸门）；Nova: ~/.nova-tools/mail.py 实际投递，凭据共用 ~/.nova-secrets/mail.json，发送记录写 mail/sent-log.md"
+  },
+  {
+   "capability": "WCA 会员采集 / 开发信名单",
+   "primary": "nova",
+   "fallback": "hannah",
+   "how": "Nova 采集 → ~/.openclaw/workspace/projects/wca-bd/data/new-members-*.csv；Hannah 读同一份 CSV 生成开发信"
+  },
+  {
+   "capability": "会议录音转写 / 纪要",
+   "primary": "hannah",
+   "fallback": "nova",
+   "how": "Hannah: whisper.cpp 本地转写 + 纪要（音频不出本机）；Nova: 飞书知识库归档/多维表格待办（分工待双方确认，勿并行建第二套）"
+  },
+  {
+   "capability": "浏览器多步操作 / 国内工商尽调",
+   "primary": "nova",
+   "fallback": "hannah",
+   "how": "Nova: browser-automation 插件（登录态在它那边）；Hannah 用 browser_exec 但不占它的登录态"
+  },
+  {
+   "capability": "知识库检索（RAG）/ 投喂入库",
+   "primary": "shared",
+   "fallback": "-",
+   "how": "同一套语料 + 同一套 chroma：~/.nova-tools/kb.sh search \"词\" / http://127.0.0.1:8765/api/search；投喂箱两个都盯，索引增量重建"
+  },
+  {
+   "capability": "文档解析 / OCR / 报表",
+   "primary": "shared",
+   "fallback": "-",
+   "how": "Hannah: pdf/docx/xlsx/powerpoint 技能 + office.py；Nova: mineru（云端，敏感件禁用）、excel-xlsx"
+  },
+  {
+   "capability": "公众号 / 对外内容发布",
+   "primary": "hannah",
+   "fallback": "-",
+   "how": "Hannah 已获授权直接发表（不勾原创）；Nova 不做公众号发布"
+  },
+  {
+   "capability": "合规与高风险文件",
+   "primary": "hannah",
+   "fallback": "-",
+   "how": "出口管制/转运规避类先报 Chris，不做；敏感证件凭据隔离区由 Hannah 管，任何 agent 不得把内容贴进外部服务"
+  },
+  {
+   "capability": "Mac 主机/网关/电源运维",
+   "primary": "hannah",
+   "fallback": "nova",
+   "how": "Hannah: macos-always-on-host、launchd、openclaw-bridge 排障；Nova 只读自查"
+  }
+ ],
+ "skills": [
+  {
+   "name": "team-hq",
+   "owner": "shared",
+   "kind": "team-skill",
+   "category": "team",
+   "description": "Use when a task may belong to the other agent, needs the other agent's skills or knowledge, or when Hannah and Nova must divide work. Shared by Hermes (Hannah) and OpenClaw (Nova).",
+   "tags": [],
+   "path": "/Users/xiaochensong/AI工作台/团队协同/skills/team-hq/SKILL.md",
+   "ready": true
+  },
+  {
+   "name": "wf-01-inquiry-quote",
+   "owner": "shared",
+   "kind": "team-skill",
+   "category": "team",
+   "description": "Use when an RFQ or new inquiry arrives and a quotation must be produced, priced and sent. Covers cost gathering, quote document, approval gate and follow-up.",
+   "tags": [],
+   "path": "/Users/xiaochensong/AI工作台/团队协同/skills/wf-01-inquiry-quote/SKILL.md",
+   "ready": true
+  },
+  {
+   "name": "wf-02-logistics-ops",
+   "owner": "shared",
+   "kind": "team-skill",
+   "category": "team",
+   "description": "Use when handling an active shipment or answering operational questions (SOP, documents, milestones, exceptions) for forwarding and cross-border moves.",
+   "tags": [],
+   "path": "/Users/xiaochensong/AI工作台/团队协同/skills/wf-02-logistics-ops/SKILL.md",
+   "ready": true
+  },
+  {
+   "name": "wf-03-gpu-procurement",
+   "owner": "shared",
+   "kind": "team-skill",
+   "category": "team",
+   "description": "Use when sourcing, vetting, pricing or moving GPU/IDC hardware and capacity (H200/B200/L40S, colo, bare metal), including the compliance gate.",
+   "tags": [],
+   "path": "/Users/xiaochensong/AI工作台/团队协同/skills/wf-03-gpu-procurement/SKILL.md",
+   "ready": true
+  },
+  {
+   "name": "wf-04-contract-kyc",
+   "owner": "shared",
+   "kind": "team-skill",
+   "category": "team",
+   "description": "Use when a contract, agreement or KYC pack must be reviewed, negotiated, signed off and archived — including red-flag extraction and approval routing.",
+   "tags": [],
+   "path": "/Users/xiaochensong/AI工作台/团队协同/skills/wf-04-contract-kyc/SKILL.md",
+   "ready": true
+  },
+  {
+   "name": "wf-05-crm",
+   "owner": "shared",
+   "kind": "team-skill",
+   "category": "team",
+   "description": "Use when updating, segmenting or acting on customer/agent records — the single customer source of truth, follow-up cadence and quiet-account revival.",
+   "tags": [],
+   "path": "/Users/xiaochensong/AI工作台/团队协同/skills/wf-05-crm/SKILL.md",
+   "ready": true
+  },
+  {
+   "name": "wf-06-mail-calendar",
+   "owner": "shared",
+   "kind": "team-skill",
+   "category": "team",
+   "description": "Use when triaging the inbox, drafting or sending mail, or scheduling/answering calendar questions — with the approval gate and the known scheduling gap.",
+   "tags": [],
+   "path": "/Users/xiaochensong/AI工作台/团队协同/skills/wf-06-mail-calendar/SKILL.md",
+   "ready": true
+  },
+  {
+   "name": "macos-browser-profile-ops",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "",
+   "description": "Use when driving the user's own Chrome on macOS.",
+   "tags": [
+    "macos",
+    "chrome",
+    "browser",
+    "profile",
+    "bookmarks",
+    "desktop",
+    "shortcuts"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/macos-browser-profile-ops/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-18"
+  },
+  {
+   "name": "macos-network-triage",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "",
+   "description": "Use when the Mac is offline or a VPN won't connect.",
+   "tags": [
+    "macos",
+    "network",
+    "vpn",
+    "proxy",
+    "dns",
+    "troubleshooting"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/macos-network-triage/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-17"
+  },
+  {
+   "name": "web-presence-audit",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "",
+   "description": "Audit domain site uptime, TLS, SEO and mailbox readiness.",
+   "tags": [
+    "web",
+    "dns",
+    "tls",
+    "seo",
+    "ops",
+    "due-diligence"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/web-presence-audit/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-20"
+  },
+  {
+   "name": "apple-notes",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "apple",
+   "description": "Manage Apple Notes via memo CLI: create, search, edit.",
+   "tags": [
+    "Notes",
+    "Apple",
+    "macOS",
+    "note-taking"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/apple/apple-notes/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-14"
+  },
+  {
+   "name": "apple-reminders",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "apple",
+   "description": "Apple Reminders via remindctl: add, list, complete.",
+   "tags": [
+    "Reminders",
+    "tasks",
+    "todo",
+    "macOS",
+    "Apple"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/apple/apple-reminders/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "findmy",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "apple",
+   "description": "Track Apple devices/AirTags via FindMy.app on macOS.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.hermes/skills/apple/findmy/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "imessage",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "apple",
+   "description": "Send and receive iMessages/SMS via the imsg CLI on macOS.",
+   "tags": [
+    "iMessage",
+    "SMS",
+    "messaging",
+    "macOS",
+    "Apple"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/apple/imessage/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "macos-always-on-host",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "apple",
+   "description": "Use when a Mac must stay online 24/7 as an always-on host.",
+   "tags": [
+    "macos",
+    "pmset",
+    "power",
+    "sleep",
+    "dns",
+    "always-on",
+    "uptime",
+    "launchd",
+    "cron"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/apple/macos-always-on-host/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-17"
+  },
+  {
+   "name": "claude-code",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "autonomous-ai-agents",
+   "description": "Delegate coding to Claude Code CLI (features, PRs).",
+   "tags": [
+    "Coding-Agent",
+    "Claude",
+    "Anthropic",
+    "Code-Review",
+    "Refactoring",
+    "PTY",
+    "Automation"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/autonomous-ai-agents/claude-code/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "codex",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "autonomous-ai-agents",
+   "description": "Delegate coding to OpenAI Codex CLI (features, PRs).",
+   "tags": [
+    "Coding-Agent",
+    "Codex",
+    "OpenAI",
+    "Code-Review",
+    "Refactoring"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/autonomous-ai-agents/codex/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "hermes-agent",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "autonomous-ai-agents",
+   "description": "Use, configure, theme, extend, and orchestrate Hermes Agent.",
+   "tags": [
+    "hermes",
+    "setup",
+    "configuration",
+    "multi-agent",
+    "spawning",
+    "cli",
+    "gateway",
+    "bots",
+    "bot-mode",
+    "features",
+    "themes",
+    "skins",
+    "desktop-plugins",
+    "tui-widgets",
+    "petdex",
+    "development"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/autonomous-ai-agents/hermes-agent/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-17"
+  },
+  {
+   "name": "openclaw-bridge",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "autonomous-ai-agents",
+   "description": "Use when driving the OpenClaw agent (Nova) from Hermes.",
+   "tags": [
+    "openclaw",
+    "nova",
+    "agent-bridge",
+    "mcp",
+    "macos"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/autonomous-ai-agents/openclaw-bridge/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-17"
+  },
+  {
+   "name": "opencode",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "autonomous-ai-agents",
+   "description": "Delegate coding to OpenCode CLI (features, PR review).",
+   "tags": [
+    "Coding-Agent",
+    "OpenCode",
+    "Autonomous",
+    "Refactoring",
+    "Code-Review"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/autonomous-ai-agents/opencode/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "architecture-diagram",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "Dark-themed SVG architecture/cloud/infra diagrams as HTML.",
+   "tags": [
+    "architecture",
+    "diagrams",
+    "SVG",
+    "HTML",
+    "visualization",
+    "infrastructure",
+    "cloud"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/creative/architecture-diagram/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "ascii-video",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "ASCII video: convert video/audio to colored ASCII MP4/GIF.",
+   "tags": [
+    "ASCII",
+    "Video",
+    "FFmpeg",
+    "Terminal-Art"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/creative/ascii-video/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "baoyu-infographic",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "Infographics: 21 layouts x 21 styles (信息图, 可视化).",
+   "tags": [
+    "infographic",
+    "visual-summary",
+    "creative",
+    "image-generation"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/creative/baoyu-infographic/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "claude-design",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "Design one-off HTML artifacts (landing, deck, prototype).",
+   "tags": [
+    "design",
+    "html",
+    "prototype",
+    "ux",
+    "ui",
+    "creative",
+    "artifact",
+    "deck",
+    "motion",
+    "design-system"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/creative/claude-design/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "design-md",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "Author/validate/export Google's DESIGN.md token spec files.",
+   "tags": [
+    "design",
+    "design-system",
+    "tokens",
+    "ui",
+    "accessibility",
+    "wcag",
+    "tailwind",
+    "dtcg",
+    "google"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/creative/design-md/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "humanizer",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "Humanize text: strip AI-isms and add real voice.",
+   "tags": [
+    "writing",
+    "editing",
+    "humanize",
+    "anti-ai-slop",
+    "voice",
+    "prose",
+    "text"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/creative/humanizer/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "manim-video",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "Manim CE animations: 3Blue1Brown math/algo videos.",
+   "tags": [
+    "Manim",
+    "Animation",
+    "Math",
+    "Video"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/creative/manim-video/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "p5js",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "p5.js sketches: gen art, shaders, interactive, 3D.",
+   "tags": [
+    "creative-coding",
+    "generative-art",
+    "p5js",
+    "canvas",
+    "interactive",
+    "visualization",
+    "webgl",
+    "shaders",
+    "animation"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/creative/p5js/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "popular-web-designs",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "54 real design systems (Stripe, Linear, Vercel) as HTML/CSS.",
+   "tags": "[design, css, html, ui, web-development, design-systems, templates]",
+   "path": "/Users/xiaochensong/.hermes/skills/creative/popular-web-designs/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "songwriting-and-ai-music",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "creative",
+   "description": "Songwriting craft and Suno AI music prompts.",
+   "tags": "[songwriting, music, suno, parody, lyrics, creative]",
+   "path": "/Users/xiaochensong/.hermes/skills/creative/songwriting-and-ai-music/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "computer-use",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "desktop",
+   "description": "Drive the desktop background-first; escalate on signal.",
+   "tags": [
+    "computer-use",
+    "desktop",
+    "automation",
+    "gui",
+    "cross-platform"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/autonomous-ai-agents/computer-use/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-18"
+  },
+  {
+   "name": "sdlc-review",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "devops",
+   "description": "Review Kanban handoffs and route verified outcomes.",
+   "tags": [
+    "kanban",
+    "review",
+    "quality",
+    "verification"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/devops/sdlc-review/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "email-inbox-triage",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "email",
+   "description": "Triage an inbox: prioritize threads, draft replies safely.",
+   "tags": [
+    "Email",
+    "Inbox",
+    "Triage",
+    "Replies",
+    "Productivity"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/email/email-inbox-triage/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "himalaya",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "email",
+   "description": "Himalaya CLI: IMAP/SMTP email from terminal.",
+   "tags": [
+    "Email",
+    "IMAP",
+    "SMTP",
+    "CLI",
+    "Communication"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/email/himalaya/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "gif-search",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "media",
+   "description": "Search/download GIFs from Tenor via curl + jq.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.hermes/skills/media/gif-search/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "songsee",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "media",
+   "description": "Audio spectrograms/features (mel, chroma, MFCC) via CLI.",
+   "tags": [
+    "Audio",
+    "Visualization",
+    "Spectrogram",
+    "Music",
+    "Analysis"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/media/songsee/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "youtube-content",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "media",
+   "description": "YouTube transcripts to summaries, threads, blogs.",
+   "tags": [
+    "YouTube",
+    "Video",
+    "Transcripts",
+    "Media"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/media/youtube-content/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "obsidian",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "note-taking",
+   "description": "Read, search, create, and edit notes in the Obsidian vault.",
+   "tags": [
+    "Obsidian",
+    "Notes",
+    "Markdown",
+    "Vault"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/note-taking/obsidian/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "airtable",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Airtable REST API via curl. Records CRUD, filters, upserts.",
+   "tags": [
+    "Airtable",
+    "Productivity",
+    "Database",
+    "API"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/airtable/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "box",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Box manages cloud files, sharing, search, and metadata.",
+   "tags": [
+    "Box",
+    "Productivity",
+    "Cloud Storage",
+    "Collaboration",
+    "Metadata",
+    "Content Extraction",
+    "CLI",
+    "SDK"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/box/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "client-meeting-minutes",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Use when the user hands over a meeting/phone-call recording or asks to record and organize a client conversation. Transcribe locally with whisper.cpp, produce a cited minutes file, and push action items into Apple Reminders with due dates.",
+   "tags": [
+    "Meetings",
+    "Transcription",
+    "Reminders",
+    "Whisper",
+    "macOS",
+    "Client"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/client-meeting-minutes/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-14"
+  },
+  {
+   "name": "document-to-action-items",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Extract cited obligations, deadlines, tasks from documents.",
+   "tags": [
+    "Documents",
+    "OCR",
+    "Action-Items",
+    "Deadlines",
+    "Extraction"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/document-to-action-items/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "docx",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Create, read, edit, template, and review Word .docx files.",
+   "tags": [
+    "word",
+    "docx",
+    "documents",
+    "office",
+    "templates",
+    "revisions",
+    "comments"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/docx/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-16"
+  },
+  {
+   "name": "feed-capture",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Use when files are dropped for Hannah to read and index.",
+   "tags": [
+    "RAG",
+    "KnowledgeBase",
+    "Ingestion",
+    "launchd",
+    "OCR",
+    "Whisper"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/feed-capture/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-17"
+  },
+  {
+   "name": "google-workspace",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.",
+   "tags": [
+    "Google",
+    "Gmail",
+    "Calendar",
+    "Drive",
+    "Sheets",
+    "Docs",
+    "Contacts",
+    "Email",
+    "OAuth"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/google-workspace/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "lishun-mail-acquisition",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Use for Chris's inbox triage, RFQ replies and WCA BD.",
+   "tags": [
+    "Email",
+    "RFQ",
+    "WCA",
+    "Freight",
+    "BD",
+    "Automation",
+    "Cron"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/lishun-mail-acquisition/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-18"
+  },
+  {
+   "name": "maps",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.",
+   "tags": [
+    "maps",
+    "geocoding",
+    "places",
+    "routing",
+    "distance",
+    "directions",
+    "nearby",
+    "location",
+    "openstreetmap",
+    "nominatim",
+    "overpass",
+    "osrm"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/maps/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "meeting-action-items",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Turn meeting notes into cited decisions, owners, tickets.",
+   "tags": [
+    "Meetings",
+    "Action-Items",
+    "Follow-Up",
+    "Productivity"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/meeting-action-items/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "ncu-phd-dissertation",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Use for Chris's NCU PhD thesis, 学术报告, survey or R analysis.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/ncu-phd-dissertation/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-18"
+  },
+  {
+   "name": "notion",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Notion API + ntn CLI: pages, databases, markdown, Workers.",
+   "tags": [
+    "Notion",
+    "Productivity",
+    "Notes",
+    "Database",
+    "API",
+    "CLI",
+    "Workers"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/notion/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "pdf",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "PDF files: create, read, merge, fill, OCR, edit text.",
+   "tags": [
+    "pdf",
+    "documents",
+    "forms",
+    "ocr",
+    "text-extraction",
+    "reportlab",
+    "pypdf",
+    "pdfplumber",
+    "pymupdf",
+    "marker"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/pdf/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "powerpoint",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Create, read, edit .pptx decks with python-pptx.",
+   "tags": [
+    "pptx",
+    "powerpoint",
+    "presentations",
+    "slides",
+    "office",
+    "python-pptx"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/powerpoint/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "product-price-monitor",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Watch product, flight, or listing prices; alert on target.",
+   "tags": [
+    "Prices",
+    "Availability",
+    "Shopping",
+    "Travel",
+    "Alerts"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/product-price-monitor/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-16"
+  },
+  {
+   "name": "teams-meeting-pipeline",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Teams meeting summaries, job replay, Graph subscriptions.",
+   "tags": [
+    "Teams",
+    "Microsoft Graph",
+    "Meetings",
+    "Productivity",
+    "Operations"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/teams-meeting-pipeline/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "trade-quotation-and-agency-agreement",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Use when drafting freight quotes or agency contracts.",
+   "tags": [
+    "freight",
+    "trade",
+    "quotation",
+    "contract",
+    "customs",
+    "china",
+    "chris"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/trade-quotation-and-agency-agreement/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-20"
+  },
+  {
+   "name": "weekly-review-planning",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Weekly reset: commitments, stalled work, next-week plan.",
+   "tags": [
+    "Weekly-Review",
+    "Planning",
+    "Tasks",
+    "Calendar",
+    "Productivity"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/weekly-review-planning/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-18"
+  },
+  {
+   "name": "xlsx",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "productivity",
+   "description": "Create, read, edit Excel .xlsx workbooks and CSVs.",
+   "tags": [
+    "excel",
+    "spreadsheet",
+    "xlsx",
+    "csv",
+    "openpyxl",
+    "productivity"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/productivity/xlsx/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "arxiv",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "research",
+   "description": "Search arXiv papers by keyword, author, category, or ID.",
+   "tags": [
+    "Research",
+    "Arxiv",
+    "Papers",
+    "Academic",
+    "Science",
+    "API"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/research/arxiv/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "competitor-news-monitor",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "research",
+   "description": "Watch named companies for material news; cited digests.",
+   "tags": [
+    "Competitors",
+    "News",
+    "Market-Research",
+    "Monitoring"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/research/competitor-news-monitor/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "cross-border-trade-daily-digest",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "research",
+   "description": "Use when producing the daily cross-border trade digest.",
+   "tags": [
+    "Trade",
+    "Shipping",
+    "Freight",
+    "Digest",
+    "Monitoring",
+    "WeChat"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/research/cross-border-trade-daily-digest/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-17"
+  },
+  {
+   "name": "grounded-citations",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "research",
+   "description": "Ground answers and documents in cited, verifiable sources.",
+   "tags": [
+    "Research",
+    "Citations",
+    "Grounding",
+    "Sources",
+    "Web",
+    "Reports"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/research/grounded-citations/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "llm-wiki",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "research",
+   "description": "Karpathy's LLM Wiki: build/query interlinked markdown KB.",
+   "tags": [
+    "wiki",
+    "knowledge-base",
+    "research",
+    "notes",
+    "markdown",
+    "rag-alternative"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/research/llm-wiki/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "stockpile-resale-deal-analysis",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "research",
+   "description": "Use when judging a stockpile/buy-to-resell deal (囤货/倒卖).",
+   "tags": [
+    "trade",
+    "pricing",
+    "gpu",
+    "risk",
+    "leverage",
+    "china",
+    "chris"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/research/stockpile-resale-deal-analysis/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-20"
+  },
+  {
+   "name": "wechat-miniprogram",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "social-media",
+   "description": "Use when building or launching a WeChat mini program.",
+   "tags": [
+    "WeChat",
+    "小程序",
+    "MiniProgram",
+    "虚拟支付",
+    "备案",
+    "类目",
+    "小游戏"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/social-media/wechat-miniprogram/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-14"
+  },
+  {
+   "name": "wechat-official-account",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "social-media",
+   "description": "Use when operating Chris's WeChat Official Account.",
+   "tags": [
+    "WeChat",
+    "公众号",
+    "Publishing",
+    "Content",
+    "Browser"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/social-media/wechat-official-account/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-21"
+  },
+  {
+   "name": "xurl",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "social-media",
+   "description": "X/Twitter via xurl CLI: raw post search, posting, DM, media.",
+   "tags": [
+    "twitter",
+    "x",
+    "social-media",
+    "xurl",
+    "official-api"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/social-media/xurl/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "codebase-inspection",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "Inspect codebases w/ pygount: LOC, languages, ratios.",
+   "tags": [
+    "LOC",
+    "Code Analysis",
+    "pygount",
+    "Codebase",
+    "Metrics",
+    "Repository"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/codebase-inspection/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "dogfood",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "Exploratory QA of web apps: find bugs, evidence, reports.",
+   "tags": [
+    "qa",
+    "testing",
+    "browser",
+    "web",
+    "dogfood"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/dogfood/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "github",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "GitHub via gh CLI: PRs, issues, reviews, repos, auth.",
+   "tags": [
+    "github",
+    "gh",
+    "git",
+    "pull-requests",
+    "issues",
+    "code-review",
+    "repos",
+    "auth",
+    "ci"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/github/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "hermes-agent-skill-authoring",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "Author in-repo SKILL.md files: frontmatter and structure.",
+   "tags": [
+    "skills",
+    "authoring",
+    "hermes-agent",
+    "conventions",
+    "skill-md"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/hermes-agent-skill-authoring/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "inspecting-hermes-desktop-dom",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "Read the live Hermes desktop DOM/CSS over CDP.",
+   "tags": [
+    "desktop",
+    "electron",
+    "cdp",
+    "dom",
+    "ui-verification",
+    "self-inspection"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/inspecting-hermes-desktop-dom/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "node-inspect-debugger",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "Debug Node.js via --inspect + Chrome DevTools Protocol CLI.",
+   "tags": [
+    "debugging",
+    "nodejs",
+    "node-inspect",
+    "cdp",
+    "breakpoints",
+    "ui-tui"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/node-inspect-debugger/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "python-debugpy",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "Debug Python: pdb REPL + debugpy remote (DAP).",
+   "tags": [
+    "debugging",
+    "python",
+    "pdb",
+    "debugpy",
+    "breakpoints",
+    "dap",
+    "post-mortem"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/python-debugpy/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "requesting-code-review",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "Pre-commit review: security scan, quality gates, auto-fix.",
+   "tags": [
+    "code-review",
+    "security",
+    "verification",
+    "quality",
+    "pre-commit",
+    "auto-fix"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/requesting-code-review/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "simplify-code",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "Parallel 4-agent cleanup of recent code changes.",
+   "tags": [
+    "code-review",
+    "cleanup",
+    "refactor",
+    "delegation",
+    "subagent",
+    "parallel",
+    "simplify"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/simplify-code/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "spike",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "Throwaway experiments to validate an idea before build.",
+   "tags": [
+    "spike",
+    "prototype",
+    "experiment",
+    "feasibility",
+    "throwaway",
+    "exploration",
+    "research",
+    "planning",
+    "mvp",
+    "proof-of-concept"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/spike/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "systematic-debugging",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "4-phase root cause debugging: understand bugs before fixing.",
+   "tags": [
+    "debugging",
+    "troubleshooting",
+    "problem-solving",
+    "root-cause",
+    "investigation"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/systematic-debugging/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "test-driven-development",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "software-development",
+   "description": "TDD: enforce RED-GREEN-REFACTOR, tests before code.",
+   "tags": [
+    "testing",
+    "tdd",
+    "development",
+    "quality",
+    "red-green-refactor"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/software-development/test-driven-development/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "chris-work-control",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "team",
+   "description": "Use when running Chris's task ledger and daily reports.",
+   "tags": [
+    "task-ledger",
+    "daily-report",
+    "decisions",
+    "work-rhythm",
+    "roles"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/team/chris-work-control/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-21"
+  },
+  {
+   "name": "blocked-page-recovery",
+   "owner": "hannah",
+   "kind": "hermes-skill",
+   "category": "web",
+   "description": "Use when a fetch fails: 403/429, paywall, WAF, bot wall.",
+   "tags": [
+    "Research",
+    "Archives",
+    "Wayback",
+    "Paywall",
+    "WAF",
+    "Fallback"
+   ],
+   "path": "/Users/xiaochensong/.hermes/skills/web/blocked-page-recovery/SKILL.md",
+   "ready": true,
+   "updated": "2026-10-12"
+  },
+  {
+   "name": "1password",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Set up and use 1Password CLI for sign-in, desktop integration, and reading or injecting secrets.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/1password/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:op"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "apple-notes",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Create, view, edit, delete, search, move, or export Apple Notes via the memo CLI on macOS.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/apple-notes/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:memo"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "apple-reminders",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "List, add, edit, complete, or delete Apple Reminders and reminder lists via remindctl.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/apple-reminders/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:remindctl"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "bear-notes",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Create, search, and manage Bear notes via grizzly CLI.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/bear-notes/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:grizzly"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "blogwatcher",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/blogwatcher/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:blogwatcher"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "blucli",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "BluOS CLI (blu) for discovery, playback, grouping, and volume.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/blucli/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:blu"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "camsnap",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Capture frames or clips from RTSP/ONVIF cameras and local webcams, including USB pan/tilt/zoom control.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/camsnap/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:camsnap"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "clawhub",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Search ClawHub for plugins by default, or skills when explicitly requested; install, verify, update, uninstall, publish, or sync skills.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/clawhub/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "coding-agent",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Delegate coding work to Codex, Claude Code, or OpenCode as background workers; not simple edits or read-only code lookup.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/coding-agent/SKILL.md",
+   "ready": false,
+   "missing": [
+    "anyBins:claude,codex,opencode",
+    "config:skills.entries.coding-agent.enabled"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "control-ui",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Operate and troubleshoot the OpenClaw Control UI: navigate connected clients, organize sessions, build session dashboards, and handle direct or Tailscale-hosted Gateways.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/control-ui/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "diagram-maker",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Create SVG/HTML or Excalidraw diagrams for concepts, architecture, flows, and whiteboards.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/diagram-maker/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "eightctl",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Control Eight Sleep pods (status, temperature, alarms, schedules).",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/eightctl/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:eightctl"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "gemini",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Gemini CLI one-shot prompts, summaries, generation, skills, hooks, MCP, or Gemma routing.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/gemini/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:gemini"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "gh-issues",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Fetch GitHub issues, select candidates, spawn background fix agents, open PRs, and optionally process PR review comments.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/gh-issues/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:gh"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "gifgrep",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Search GIF providers with CLI/TUI, download results, and extract stills/sheets.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/gifgrep/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:gifgrep"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "github",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "GitHub CLI for issues, PRs, CI/check logs, comments, reviews, releases, repos, and gh api queries.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/github/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:gh"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "gog",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/gog/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:gog"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "goplaces",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Query Google Places for text search, place details, resolve, reviews, or scriptable JSON via goplaces.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/goplaces/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:goplaces",
+    "env:GOOGLE_PLACES_API_KEY"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "healthcheck",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Audit/harden OpenClaw hosts: SSH, firewall, updates, exposure, backups, disk encryption, gateway security.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/healthcheck/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "himalaya",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Himalaya CLI for IMAP/SMTP mail: list, read, search, compose, reply, forward, copy, move, delete.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/himalaya/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "mcporter",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "List, configure, authenticate, call, and inspect MCP servers/tools with mcporter over HTTP or stdio.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/mcporter/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:mcporter"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "meme-maker",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Search meme templates, suggest formats, and generate local or hosted image memes.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/meme-maker/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "model-usage",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Summarize CodexBar local cost logs by model for Codex or Claude, including current or full breakdowns.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/model-usage/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:codexbar"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "nano-pdf",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Edit PDFs with natural-language instructions using the nano-pdf CLI.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/nano-pdf/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:nano-pdf"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "node-connect",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Diagnose OpenClaw Control UI browser and native Android, iOS, or macOS node connection failures across route, auth, pairing, QR/setup-code, and reconnect states.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/node-connect/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "node-inspect-debugger",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Debug Node.js with node inspect, --inspect, breakpoints, CDP, heap, and CPU profiles.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/node-inspect-debugger/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "notion",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Notion CLI/API for pages, Markdown content, data sources, files, comments, search, Workers, and raw API calls.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/notion/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "obsidian",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Work with Obsidian vaults using the official obsidian CLI: read/search/create/edit notes, tasks, links, properties, plugins.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/obsidian/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:obsidian"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "openai-whisper",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Local speech-to-text with the Whisper CLI (no API key).",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/openai-whisper/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:whisper"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "openai-whisper-api",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "OpenAI Audio Transcriptions API via curl; gpt-4o-transcribe, mini, diarize, or whisper-1.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/openai-whisper-api/SKILL.md",
+   "ready": false,
+   "missing": [
+    "env:OPENAI_API_KEY"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "openhue",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Control Philips Hue lights and scenes via the OpenHue CLI.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/openhue/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:openhue"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "oracle",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Oracle CLI second-model review/debug/refactor/design with selected files, dry-run token checks, API or browser engine.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/oracle/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:oracle"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "ordercli",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Foodora-only CLI for checking past orders and active order status (Deliveroo WIP).",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/ordercli/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:ordercli"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "peekaboo",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Capture and automate macOS UI with the Peekaboo CLI.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/peekaboo/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:peekaboo"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "python-debugpy",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Debug Python with pdb, breakpoint(), post-mortem inspection, and debugpy remote attach.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/python-debugpy/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "sag",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "ElevenLabs text-to-speech with mac-style say UX.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/sag/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:sag"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "sherpa-onnx-tts",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Local text-to-speech via sherpa-onnx (offline, no cloud)",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/sherpa-onnx-tts/SKILL.md",
+   "ready": false,
+   "missing": [
+    "env:SHERPA_ONNX_RUNTIME_DIR,SHERPA_ONNX_MODEL_DIR"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "skill-creator",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Author or review AgentSkills: create, repair, validate, or restructure SKILL.md files and bundled resources.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/skill-creator/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "songsee",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Generate spectrograms and feature-panel visualizations from audio with the songsee CLI.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/songsee/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:songsee"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "sonoscli",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Control Sonos speakers (discover/status/play/volume/group).",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/sonoscli/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:sonos"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "spike",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Run throwaway prototypes to validate feasibility, compare approaches, and report a verdict.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/spike/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "spotify-player",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Terminal Spotify playback/search via spogo (preferred) or spotify_player.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/spotify-player/SKILL.md",
+   "ready": false,
+   "missing": [
+    "anyBins:spogo,spotify_player"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "summarize",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Summarize or transcribe URLs, YouTube/videos, podcasts, articles, transcripts, PDFs, and local files.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/summarize/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:summarize"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "things-mac",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Add, update, list, search, or inspect Things 3 todos, inbox, today, projects, areas, and tags on macOS.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/things-mac/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:things"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "tmux",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Control tmux sessions/panes for interactive CLIs: list, capture output, send keys, paste text, monitor prompts.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/tmux/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "trello",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Manage Trello boards, lists, and cards via the Trello REST API.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/trello/SKILL.md",
+   "ready": false,
+   "missing": [
+    "env:TRELLO_API_KEY,TRELLO_TOKEN"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "visualize",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Create inline visuals for code and explanations, or author persistent OpenClaw dashboard widgets with show_widget.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/visualize/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "weather",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "Current weather and forecasts with web_fetch, falling back to wttr.in curl for locations, rain, temperature, travel planning.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/weather/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "xurl",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-bundled",
+   "description": "xurl CLI for authenticated X posts, replies, reads/search, DMs, media upload, followers, auth status, or raw v2 API calls.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/xurl/SKILL.md",
+   "ready": false,
+   "missing": [
+    "bins:xurl"
+   ],
+   "invocable": true
+  },
+  {
+   "name": "add-model-provider",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-custodian",
+   "description": "Add and live-prove a model provider with non-interactive config one-liners, without exposing credentials.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/add-model-provider/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "cloud-image-bake",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-custodian",
+   "description": "Bake, select, prove, and safely retire a Cloud Worker image with crabbox and config one-liners.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/cloud-image-bake/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "configure-channel",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-custodian",
+   "description": "Configure and prove a chat channel with non-interactive one-liners; secrets only as SecretRefs.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/configure-channel/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "diagnose-gateway",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-custodian",
+   "description": "Diagnose Gateway, config, secrets, channels, and port failures with read-only one-liners.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/diagnose-gateway/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "browser-automation",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-extra",
+   "description": "Use when controlling web pages with the OpenClaw browser tool, especially multi-step flows, login checks, tab management, or recovery from stale refs/timeouts.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/browser-automation/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": false
+  },
+  {
+   "name": "canvas",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-extra",
+   "description": "Present hosted widget documents on a connected macOS panel and control panel visibility or navigation.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/canvas/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "feishu-doc",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-extra",
+   "description": "Feishu document read/write workflows. Activate when the user mentions Feishu docs, cloud docs, or docx links.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/feishu-doc/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "feishu-drive",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-extra",
+   "description": "Feishu cloud-storage and comment workflows. Activate when the user mentions cloud space, folders, Drive files, or document comments.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/feishu-drive/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "feishu-perm",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-extra",
+   "description": "Feishu collaborator and permission workflows. Activate when the user explicitly asks to inspect or change sharing, permissions, or collaborators.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/feishu-perm/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "feishu-wiki",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-extra",
+   "description": "Feishu knowledge-base navigation workflows. Activate when the user mentions a knowledge base, wiki, or wiki link.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/feishu-wiki/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "obsidian-vault-maintainer",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-extra",
+   "description": "Maintain an Obsidian-friendly memory wiki vault with wikilinks, frontmatter, and official Obsidian CLI awareness.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/obsidian-vault-maintainer/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "wiki-maintainer",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-extra",
+   "description": "Maintain the OpenClaw memory wiki vault with deterministic pages, managed blocks, and source-backed updates.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/wiki-maintainer/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "contract-review",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "审阅本地 PDF/Word/Excel 合同与商务文档：提条款、多文档比对、标风险、出报告。触发：合同、比对、风险检查、文档审核、审一下、有没有坑。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/contract-review/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "diagnose-channel-silence",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "渠道(微信/飞书)收不到消息、怀疑网关没启动时的诊断：查渠道桥连接、识别「小地球仪」网络扩展 TLS 劫持并修复。触发：微信不回、飞书不回、渠道没反应、是不是网关没启动。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/diagnose-channel-silence/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "diagnose-local-job-failure",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "诊断本机定时任务/脚本失败：先读任务日志（exit 124 等），再判定是文件系统读挂起还是权限拒绝。触发：收割器/入库任务失败、退出码 124、输出目录为空、ls/opendir 卡住、读文件挂起、定时任务挂了、hang。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/diagnose-local-job-failure/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "email-assistant",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "跨境商务邮件助手：据报告生成中英双语邮件，适配外贸。触发：写邮件、回邮件、报价邮件。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/email-assistant/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "host-capability-inventory",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "如实盘点本机能力：工作区结构、已装技能、Hannah+Nova 团队技能总账、IM 通道实测状态、依赖/凭据。触发：资产盘点、能力清单、你能干什么、团队技能总账、盘点技能/通道/凭据。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/host-capability-inventory/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "knowledge-base-ops",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "本机 Chroma 知识库：按分类检索/新增/删除、把 source 定位回原文件，以及建库、判分类、重建索引、起检索页面。触发：查知识库、搜知识库、新增/删除知识、找原始文件、建知识库、重建索引、加分类、Chroma collection。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/knowledge-base-ops/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "local-corpus-search",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "本地优先检索：在邮件/工作区/知识库/日历里查人、事、行程、联系人、历史往来、待办。触发：查邮件、查工作区、找一下、有没有记录、行程/联系人/项目在哪、本地有没有。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/local-corpus-search/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "openclaw-deployment-audit",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "只读体检 OpenClaw 部署并规划安全远程接入：版本、Gateway 绑定/鉴权、渠道、插件来源、已配对设备、远程访问、iOS/iPad 配对、外部执行节点（Hermes）互通。触发：检查 OpenClaw 配置、部署体检、能不能远程用、iPad/手机接入、接执行节点、Nova 2.0 架构。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/openclaw-deployment-audit/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "security-guardrails",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "高危操作审批、凭据保护、外部指令隔离、操作审计。触发：安全、审批、权限、密钥泄露、审计。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/security-guardrails/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "vision-image-recognition",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "识别图片/扫描件用视觉模型 psydo/gpt-5.5 转 Markdown，替代 OCR。触发：识图、看图、扫描件、转文字。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/vision-image-recognition/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "web-research",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workshop",
+   "description": "实时网页检索与行业调研：多源搜索→抓取→交叉验证→带引用简报。触发：查企业/供应商/GPU/IDC/行业资料。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/skills/web-research/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "Excel / XLSX",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workspace",
+   "description": "Create, inspect, and edit Microsoft Excel workbooks and XLSX files with reliable formulas, dates, types, formatting, recalculation, and template preservation. Use when (1) the task is about Excel, `.xlsx`, `.xlsm`, `.xls`, `.csv`, or `.tsv`; (2) formulas, formatting, workbook structure, or compatibility matter; (3) the file must stay reliable after edits.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/workspace/skills/Excel / XLSX/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "MinerU Document Extractor",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workspace",
+   "description": "MinerU document extraction — convert PDFs, scanned documents, images, Word (DOC/DOCX), PowerPoint (PPT/PPTX), Excel (XLS/XLSX), and web pages into clean Markdown, HTML, LaTeX, or DOCX. MinerU is an all-in-one CLI tool and agent skill for reliable, high-fidelity document parsing. Struggling with unreadable PDFs, messy table formatting, or garbled formulas after conversion? MinerU solves these with two extraction modes: MinerU flash-extract for instant zero-setup conversion with table recognition, formula recognition, and OCR (no token, no login, no configuration — just run and get results), and MinerU precision extract with VLM-based layout analysis, multiple output formats, and batch processing of hundreds of files. Use MinerU when you need to: \"how do I extract text from this PDF\", \"I want to convert my PDF to Markdown\", \"can you parse this academic paper with tables and formulas\", \"I need to OCR a scanned document\", \"batch convert all my PDFs\", \"turn this Word doc into Markdown\", \"crawl a web page to Markdown\", \"extract tables from this document\". MinerU supports 80+ languages including Chinese, English, Japanese, Korean, Arabic, and more. Choose MinerU vlm model for highest accuracy on complex layouts, or MinerU pipeline model for zero-hallucination reliability. Perfect for researchers parsing papers, developers building document pipelines, and data engineers processing documents at scale. MinerU文档提取工具，PDF转Markdown、扫描件OCR、表格识别、公式识别、批量PDF处理、Word转Markdown、Excel转Markdown、网页爬取、图片OCR、学术论文解析。MinerU支持PDF、Word、PPT、Excel（XLS/XLSX）、图片等多格式文档智能转换，命令行一键提取，免登录快速模式或高精度专业模式。",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/workspace/skills/MinerU Document Extractor/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "company-research",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workspace",
+   "description": "Free company research for AI agents: give it a company domain and get a cited company brief — what it does, products, pricing, target market, integrations, and key pages — from first-party evidence, with no API key and no signup.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/workspace/skills/company-research/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  },
+  {
+   "name": "tavily-search",
+   "owner": "nova",
+   "kind": "openclaw-skill",
+   "category": "openclaw-workspace",
+   "description": "Search the public web through Tavily and return structured results with URLs and snippets. Use when an agent needs current information, source discovery, link lookup, news or finance search, or a fallback for unavailable built-in web search. Do not use for private or authenticated pages.",
+   "tags": [],
+   "path": "/Users/xiaochensong/.openclaw/workspace/skills/tavily-search/SKILL.md",
+   "ready": true,
+   "missing": [],
+   "invocable": true
+  }
+ ]
+}

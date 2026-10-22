@@ -1,0 +1,23 @@
+# 绝不入库
+敏感-*/
+高风险-*/
+*.pdf
+*.docx
+*.xlsx
+*.pptx
+*.zip
+*.dmg
+*.p12
+*.pem
+*.key
+.env
+*secrets*
+*凭据*
+*证件*
+
+# 系统垃圾
+.DS_Store
+**/.DS_Store
+__pycache__/
+*.pyc
+*.lock
