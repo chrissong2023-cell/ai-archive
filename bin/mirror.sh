@@ -30,21 +30,27 @@ fi
 ls -1t "$BUNDLE_DIR"/ai-archive-*.bundle 2>/dev/null | tail -n +15 | while read -r old; do rm -f "$old"; log "清理旧快照 $(basename "$old")"; done
 
 # 2) 服务器镜像（配置了才执行）
-CFG="$HOME/.hermes-secrets/ai-archive-server.json"
-if [ -f "$CFG" ]; then
-  HOST=$(python3 -c "import json;print(json.load(open('$CFG')).get('host',''))" 2>/dev/null)
-  USER_=$(python3 -c "import json;print(json.load(open('$CFG')).get('user',''))" 2>/dev/null)
-  P=$(python3 -c "import json;print(json.load(open('$CFG')).get('port',22))" 2>/dev/null)
-  if [ -n "$HOST" ] && [ -n "$USER_" ]; then
-    if git push --quiet "ssh://$USER_@$HOST:$P/~/repos/ai-archive.git" --all 2>>"$LOG" &&
-       git push --quiet "ssh://$USER_@$HOST:$P/~/repos/ai-archive.git" --tags 2>>"$LOG"; then
-      log "✅ 服务器镜像完成 $USER_@$HOST"
-    else
-      log "⚠️ 服务器镜像失败（检查密钥或远端裸库）"
-    fi
-  fi
+if [ -f "$HOME/.hermes-secrets/ai-archive-server.json" ]; then
+  python3 - "$REPO" "$LOG" <<'PY'
+import json, os, subprocess, sys, datetime
+repo, logf = sys.argv[1], sys.argv[2]
+cfg = json.load(open(os.path.expanduser("~/.hermes-secrets/ai-archive-server.json")))
+host, user, port = cfg.get("host"), cfg.get("user"), int(cfg.get("port", 22))
+def log(m):
+    line = f"[{datetime.datetime.now():%Y-%m-%d %H:%M:%S}] {m}"
+    print(line); open(logf, "a").write(line + "\n")
+if not (host and user):
+    log("⏭ 服务器配置不完整（需要 host/user）"); sys.exit(0)
+remote = f"ssh://{user}@{host}:{port}/~/repos/ai-archive.git"
+ok = True
+for args in (["push", "--quiet", remote, "--all"], ["push", "--quiet", remote, "--tags"]):
+    r = subprocess.run(["git"] + args, cwd=repo, capture_output=True, text=True)
+    if r.returncode != 0:
+        ok = False; log(f"⚠️ 服务器镜像失败: {r.stderr.strip()[:160]}")
+log("✅ 服务器镜像完成" if ok else "⚠️ 服务器镜像未完成（检查密钥或远端裸库）")
+PY
 else
-  log "⏭ 服务器镜像未配置（缺 $CFG）"
+  log "⏭ 服务器镜像未配置（缺 ~/.hermes-secrets/ai-archive-server.json）"
 fi
 
 log "完成"
