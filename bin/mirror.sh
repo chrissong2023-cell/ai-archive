@@ -19,7 +19,19 @@ if [ -n "$(git status --porcelain)" ]; then
   log "已提交本地变更"
 fi
 
-# 1) 云盘 bundle（整仓历史打成一个文件，自带校验）
+# 1) 先推 GitHub 主库（有 origin 才执行；网络偶发被代理重置，重试 3 次）
+if git remote get-url origin >/dev/null 2>&1; then
+  OK=0
+  for i in 1 2 3; do
+    if git push -q origin --all 2>>"$LOG" && git push -q origin --tags 2>>"$LOG"; then OK=1; break; fi
+    sleep 5
+  done
+  [ "$OK" = 1 ] && log "✅ GitHub 已推送 $(git rev-parse --short HEAD)" || log "⚠️ GitHub 推送失败（已重试 3 次）"
+else
+  log "⏭ 未配置 origin（跳过 GitHub）"
+fi
+
+# 2) 云盘 bundle（整仓历史打成一个文件，自带校验）
 OUT="$BUNDLE_DIR/ai-archive-$(date '+%Y-%m-%d').bundle"
 if git bundle create "$OUT" --all 2>>"$LOG"; then
   git bundle verify "$OUT" >/dev/null 2>&1 && log "✅ 云盘快照 $(basename "$OUT") $(du -h "$OUT" | cut -f1)" || log "⚠️ bundle 校验失败"
@@ -29,7 +41,7 @@ fi
 # 只留最近 14 天
 ls -1t "$BUNDLE_DIR"/ai-archive-*.bundle 2>/dev/null | tail -n +15 | while read -r old; do rm -f "$old"; log "清理旧快照 $(basename "$old")"; done
 
-# 2) 服务器镜像（配置了才执行）
+# 3) 服务器镜像（配置了才执行）
 if [ -f "$HOME/.hermes-secrets/ai-archive-server.json" ]; then
   python3 - "$REPO" "$LOG" <<'PY'
 import json, os, subprocess, sys, datetime
