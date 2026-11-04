@@ -64,3 +64,26 @@
 [2026-11-03 03:10:14] ✅ 云盘快照 ai-archive-2026-11-03.bundle 1.3M
 [2026-11-03 03:10:14] ⏭ 服务器镜像未配置（缺 ~/.hermes-secrets/ai-archive-server.json）
 [2026-11-03 03:10:14] 完成
+[2026-11-04 03:10:02] 已提交本地变更
+kex_exchange_identification: read: Connection reset by peer
+Connection reset by 198.18.0.146 port 22
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+kex_exchange_identification: read: Connection reset by peer
+Connection reset by 198.18.0.146 port 22
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+kex_exchange_identification: read: Connection reset by peer
+Connection reset by 198.18.0.146 port 22
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+[2026-11-04 03:10:35] ⚠️ GitHub 推送失败（已重试 3 次）
+[2026-11-04 03:10:35] ✅ 云盘快照 ai-archive-2026-11-04.bundle 1.3M
+[2026-11-04 03:10:35] ⏭ 服务器镜像未配置（缺 ~/.hermes-secrets/ai-archive-server.json）
+[2026-11-04 03:10:35] 完成
