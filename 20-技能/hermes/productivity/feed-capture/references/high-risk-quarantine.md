@@ -9,7 +9,7 @@
 |---|---|---|---|
 | `cred` | `~/AI工作台/敏感-凭据/` | `knowledge/feed/hermes-cred/` | 账号密码/密码/password/passwd/IBAN/RIB/SWIFT/银行账号/API key/secret/access key/token/私钥/快递账号/credentials |
 | `pii` | `~/AI工作台/敏感-个人证件/` | `knowledge/feed/hermes-pii/` | 身份证/护照/通行证/台胞证/驾驶证/户口本/出生证明/结婚证/居留许可/passport/id card/resident permit |
-| `gpu` | `~/AI工作台/高风险-GPU服务器/` | `knowledge/feed/hermes-risk-gpu/` | GPU/H200/B300/H100/L40S/NVIDIA/加速卡/服务器/机柜/托管/colocation/数据中心/HBM/出口管制/BIS/实体清单/EAR/最终用户/再出口/转口 |
+| `gpu` | `~/AI工作台/高风险-GPU服务器/` | `knowledge/feed/hermes-risk-gpu/` | GPU/加速卡型号S/NVIDIA/加速卡/服务器/机柜/托管/colocation/数据中心/HBM/出口管制/BIS/实体清单/EAR/最终用户/再出口/转口 |
 
 判定优先级：**cred > pii > gpu**（越敏感越先判）。清除：`purge_risk.py --kind gpu|cred|pii|all [--confirm]`。
 
@@ -37,6 +37,6 @@
 
 ## 已知会落进各区的具型文件
 
-- `gpu`：GPU/服务器采购协议与 LOI（NVA/NVIDIA B300 LOI、BTMind 55xB300 GPU Server Agreement）、IDC 托管主协议（colocation 64 racks）、供货商 KYC 包、PT Mindai/SuperX 类主体资料、NVIDIA 全球 AI 云开发数据库。凡涉最终用户/再出口/转口描述的文件一律进 gpu 区。
+- `gpu`：GPU/服务器采购协议与 LOI（加速卡 LOI、整机采购协议）、IDC 托管主协议（colocation 64 racks）、供货商 KYC 包、PT Mindai/SuperX 类主体资料、NVIDIA 全球 AI 云开发数据库。凡涉最终用户/再出口/转口描述的文件一律进 gpu 区。
 - `cred`：快递账号密码（UPS/联邦/DHL）、RIB/IBAN、境外银行账号信息（如俄罗斯 VTB）。这类文件往往叫“账号及密码”“账户信息”，**文件名命中即隔离**，不要等正文累积到两个特征词。
 - `pii`：身份证、护照、注册公司信息（含法人证件）等。
